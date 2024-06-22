@@ -3,8 +3,6 @@ package game
 import (
 	"fmt"
 
-	"cli-wordle/internal/util"
-
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -17,11 +15,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.message = "Guess must be 5 letters"
 				return m, nil
 			}
-			if !util.ValidGuess(m.guess, m.words) {
+			if !validGuess(m.guess, m.words) {
 				m.message = "Invalid word"
 				return m, nil
 			}
 			m.tries = append(m.tries, m.guess)
+			updateLetterStatus(&m, m.guess, m.solution)
 			if m.guess == m.solution {
 				m.won = true
 				m.message = "Congratulations! You guessed the word!"
